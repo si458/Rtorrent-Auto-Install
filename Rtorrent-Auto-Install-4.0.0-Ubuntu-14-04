@@ -777,22 +777,22 @@ function INSTALL_RUTORRENT {
 	git clone https://github.com/Novik/ruTorrent.git
 	mv ruTorrent rutorrent
 	
-	if [ -d /var/www/rutorrent ]; then
-		rm -rf /var/www/rutorrent
+	if [ -d /var/www/html/rutorrent ]; then
+		rm -rf /var/www/html/rutorrent
 	fi
 
 	# Changeing SCGI mount point in rutorrent config.
 	sed -i "s/\/RPC2/\/rutorrent\/RPC2/g" ./rutorrent/conf/config.php
 
-	mv -f rutorrent /var/www/
+	mv -f rutorrent /var/www/html/
 
 	if [ -d "$TEMP_PLUGIN_DIR" ]; then
-		mv -fv "$TEMP_PLUGIN_DIR"/* /var/www/rutorrent/plugins
+		mv -fv "$TEMP_PLUGIN_DIR"/* /var/www/html/rutorrent/plugins
 	fi
 
 	# Changing permissions for rutorrent and plugins.
-	chown -R www-data.www-data /var/www/rutorrent
-	chmod -R 775 /var/www/rutorrent
+	chown -R www-data.www-data /var/www/html/rutorrent
+	chmod -R 775 /var/www/html/rutorrent
 }
 
 # Function for configuring apache
@@ -819,7 +819,7 @@ function CONFIGURE_APACHE {
 <VirtualHost *:80>
     #ServerName www.example.com
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www
+    DocumentRoot /var/www/html
     ErrorLog ${APACHE_LOG_DIR}/error.log
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 
@@ -827,11 +827,11 @@ function CONFIGURE_APACHE {
     ErrorLog /var/log/apache2/rutorrent_error.log
     SCGIMount /rutorrent/RPC2 127.0.0.1:5000
 
-    <Directory "/var/www/rutorrent">
+    <Directory "/var/www/html/rutorrent">
         AuthName "Tits or GTFO"
         AuthType Basic
         Require valid-user
-        AuthUserFile /var/www/rutorrent/.htpasswd
+        AuthUserFile /var/www/html/rutorrent/.htpasswd
     </Directory>
 
 </VirtualHost>
@@ -844,17 +844,17 @@ EOF
 	fi
 
 	# Creating .htaccess file
-	printf "%s\n" "${WEB_USER_ARRAY[@]}" > /var/www/rutorrent/.htpasswd
+	printf "%s\n" "${WEB_USER_ARRAY[@]}" > /var/www/html/rutorrent/.htpasswd
 }
 
 # Function for setting up the init script.
 function SETUP_INIT {
 	# Downloading and installing rtorrent init script.
-	wget -O /etc/init.d/rtorrent-init https://raw.github.com/Kerwood/rtorrent.auto.install/master/Files/rtorrent-init
-	chmod +x /etc/init.d/rtorrent-init
-	sed -i "s/USERNAMEHERE/$RTORRENT_USER/g" /etc/init.d/rtorrent-init
-	update-rc.d rtorrent-init defaults
-	service rtorrent-init start
+	wget -O /etc/init.d/rtorrent https://raw.github.com/Kerwood/rtorrent.auto.install/master/Files/rtorrent-init
+	chmod +x /etc/init.d/rtorrent
+	sed -i "s/USERNAMEHERE/$RTORRENT_USER/g" /etc/init.d/rtorrent
+	update-rc.d rtorrent defaults
+	service rtorrent start
 }
 
 function INSTALL_COMPLETE {

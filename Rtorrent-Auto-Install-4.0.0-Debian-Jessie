@@ -789,6 +789,7 @@ function INSTALL_RUTORRENT {
 	# curl -L http://dl.bintray.com/novik65/generic/rutorrent-3.6.tar.gz -o rutorrent-3.6.tar.gz
 	# tar -zxvf rutorrent-3.6.tar.gz
 	git clone https://github.com/Novik/ruTorrent.git
+	mv ruTorrent rutorrent	
 
 	if [ -d /var/www/html/rutorrent ]; then
 		rm -r /var/www/html/rutorrent

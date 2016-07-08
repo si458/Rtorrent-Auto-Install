@@ -715,7 +715,7 @@ function INSTALL_RTORRENT {
 	cd /tmp
 
 	# Download and install xmlrpc-c super-stable
-	curl -L http://sourceforge.net/projects/xmlrpc-c/files/Xmlrpc-c%20Super%20Stable/1.33.18/xmlrpc-c-1.33.18.tgz/download -o xmlrpc-c.tgz
+	curl -L http://sourceforge.net/projects/xmlrpc-c/files/Xmlrpc-c%20Super%20Stable/1.39.08/xmlrpc-c-1.39.08.tgz/download -o xmlrpc-c.tgz
 	tar zxvf xmlrpc-c.tgz
 	mv xmlrpc-c-1.* xmlrpc
 	cd xmlrpc
@@ -730,9 +730,11 @@ function INSTALL_RTORRENT {
 	cd rtorrent
 
 	# Download and install libtorrent
-	curl -L http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz -o libtorrent.tar.gz
-	tar -zxvf libtorrent.tar.gz
-	cd libtorrent-0.13.6
+	# curl -L http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz -o libtorrent.tar.gz
+	# tar -zxvf libtorrent.tar.gz
+	# cd libtorrent-0.13.6
+	git clone https://github.com/rakshasa/libtorrent.git
+	cd libtorrent
 	./autogen.sh
 	./configure
 	make
@@ -741,9 +743,11 @@ function INSTALL_RTORRENT {
 	cd ..
 
 	# Download and install rtorrent
-	curl -L http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz -o rtorrent.tar.gz
-	tar -zxvf rtorrent.tar.gz
-	cd rtorrent-0.9.6
+	# curl -L http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz -o rtorrent.tar.gz
+	# tar -zxvf rtorrent.tar.gz
+	# cd rtorrent-0.9.6
+	git clone https://github.com/rakshasa/rtorrent.git
+	cd rtorrent
 	./autogen.sh
 	./configure --with-xmlrpc-c
 	make
@@ -779,9 +783,11 @@ function INSTALL_RTORRENT {
 # Function for installing rutorrent and plugins
 function INSTALL_RUTORRENT {
 	# Installing rutorrent.
-	curl -L http://dl.bintray.com/novik65/generic/rutorrent-3.6.tar.gz -o rutorrent-3.6.tar.gz
-	tar -zxvf rutorrent-3.6.tar.gz
-
+	# curl -L http://dl.bintray.com/novik65/generic/rutorrent-3.6.tar.gz -o rutorrent-3.6.tar.gz
+	# tar -zxvf rutorrent-3.6.tar.gz
+	git clone https://github.com/Novik/ruTorrent.git
+	mv ruTorrent rutorrent
+	
 	if [ -d /var/www/rutorrent ]; then
 		rm -r /var/www/rutorrent
 	fi
@@ -790,7 +796,7 @@ function INSTALL_RUTORRENT {
 	sed -i "s/\/RPC2/\/rutorrent\/RPC2/g" ./rutorrent/conf/config.php
 
 	mv -f rutorrent /var/www/
-	rm -v rutorrent-3.6.tar.gz
+	# rm -v rutorrent-3.6.tar.gz
 
 	if [ -d "$TEMP_PLUGIN_DIR" ]; then
 		mv -fv "$TEMP_PLUGIN_DIR"/* /var/www/rutorrent/plugins

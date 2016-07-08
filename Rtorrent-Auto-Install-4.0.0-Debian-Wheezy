@@ -706,7 +706,7 @@ function APT_DEPENDENCIES {
 	apt-get update
 	apt-get -y install openssl git apache2 apache2-utils build-essential libsigc++-2.0-dev \
 	libcurl4-openssl-dev automake libtool libcppunit-dev libncurses5-dev libapache2-mod-scgi \
-	php5 php5-curl php5-cli libapache2-mod-php5 screen unzip libssl-dev curl
+	php5 php5-curl php5-cli libapache2-mod-php5 screen unzip libssl-dev curl subversion
 }
 
 # Function for setting up xmlrpc, libtorrent and rtorrent
@@ -715,24 +715,19 @@ function INSTALL_RTORRENT {
 	cd /tmp
 
 	# Download and install xmlrpc-c super-stable
-	curl -L http://sourceforge.net/projects/xmlrpc-c/files/Xmlrpc-c%20Super%20Stable/1.39.08/xmlrpc-c-1.39.08.tgz/download -o xmlrpc-c.tgz
-	tar zxvf xmlrpc-c.tgz
-	mv xmlrpc-c-1.* xmlrpc
-	cd xmlrpc
+ 	sudo svn checkout http://svn.code.sf.net/p/xmlrpc-c/code/stable xmlrpc-c
+        cd xmlrpc-c
 	./configure --disable-cplusplus
 	make
 	make install
 
 	cd ..
-	rm -rv xmlrpc*
+	rm -rv xmlrpc-c*
 
 	mkdir rtorrent
 	cd rtorrent
 
 	# Download and install libtorrent
-	# curl -L http://rtorrent.net/downloads/libtorrent-0.13.6.tar.gz -o libtorrent.tar.gz
-	# tar -zxvf libtorrent.tar.gz
-	# cd libtorrent-0.13.6
 	git clone https://github.com/rakshasa/libtorrent.git
 	cd libtorrent
 	./autogen.sh
@@ -743,9 +738,6 @@ function INSTALL_RTORRENT {
 	cd ..
 
 	# Download and install rtorrent
-	# curl -L http://rtorrent.net/downloads/rtorrent-0.9.6.tar.gz -o rtorrent.tar.gz
-	# tar -zxvf rtorrent.tar.gz
-	# cd rtorrent-0.9.6
 	git clone https://github.com/rakshasa/rtorrent.git
 	cd rtorrent
 	./autogen.sh
@@ -783,8 +775,6 @@ function INSTALL_RTORRENT {
 # Function for installing rutorrent and plugins
 function INSTALL_RUTORRENT {
 	# Installing rutorrent.
-	# curl -L http://dl.bintray.com/novik65/generic/rutorrent-3.6.tar.gz -o rutorrent-3.6.tar.gz
-	# tar -zxvf rutorrent-3.6.tar.gz
 	git clone https://github.com/Novik/ruTorrent.git
 	mv ruTorrent rutorrent
 	
